@@ -38,14 +38,6 @@ const routes = [
       guest: true,
     },
   },
-
-  {
-    path: "/leaf",
-    name: "Leaf",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "@/views/LeafView.vue"),
-  },
-
   {
     path: "*",
     name: "Error",
