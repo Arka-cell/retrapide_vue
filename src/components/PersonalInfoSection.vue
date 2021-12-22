@@ -1,58 +1,99 @@
 <template>
-  <section id="personal-info-section" class="section is-relative column is-8">
-    <h1 class="title">Informations personnelles</h1>
-
-    <b-loading
-      v-model="isLoading"
-      :is-full-page="false"
-      :can-cancel="false"
-    ></b-loading>
-
-    <BFieldWithValidation
-      reference="first_name"
-      rules="required|alpha"
-      type="text"
-      label="Prénom"
-      :value="firstName"
-      @updateEvent="update"
-    />
-    <BFieldWithValidation
-      reference="last_name"
-      rules="required|alpha"
-      type="text"
-      label="Nom"
-      :value="lastName"
-      @updateEvent="update"
-    />
-  </section>
+  <div>
+    <section class="section">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-6 is-4-desktop mb-5 is-centered">
+            <div class="py-5 has-text-centered">
+              <span class="has-text-grey-dark">Full Name</span>
+              <h3 class="mb-5 is-size-4 has-text-weight-bold">Profile Info</h3>
+              <div class="field">
+                <div class="mb-2 columns is-multiline">
+                  <div class="column is-6">
+                    <div class="control">
+                      <input
+                        class="input"
+                        type="text"
+                        placeholder="First Name"
+                        v-model="personalInfos.first_name"
+                      />
+                    </div>
+                  </div>
+                  <div class="column is-6">
+                    <div class="control">
+                      <input
+                        class="input"
+                        type="text"
+                        placeholder="Last Name"
+                        v-model="personalInfos.last_name"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <input
+                    class="input mb-2"
+                    type="date"
+                    placeholder="Birthdate"
+                    min="1900-01-01" max="2022-01-01"
+                    v-model="personalInfos.birthdate"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <input
+                    class="input mb-3"
+                    type="text"
+                    placeholder="Address"
+                    v-model="personalInfos.location"
+                  />
+                </div>
+              </div>
+              <label class="checkbox mb-5">
+                <input
+                  class="checkbox mr-2"
+                  type="checkbox"
+                  name="terms"
+                  v-model="personalInfos.open_for_job"
+                />
+                <small class="has-text-grey-dark"
+                  >Currently looking for a job?</small
+                >
+              </label>
+              <button class="button is-primary mb-3 is-fullwidth" @click="updateInfos()">
+                Update Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
-
 <script>
-import BFieldWithValidation from "@/components/BFieldWithValidation.vue";
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "PersonalInfoSection",
-  components: { BFieldWithValidation },
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      isLoading: false,
-    };
+      personalInfos: {}
+    }
   },
-  async created() {
-    this.isLoading = true;
-    let { data } = await axios.get("/seeker-infos/");
-    this.firstName = data.first_name;
-    this.lastName = data.last_name;
-    this.isLoading = false;
+  async mounted() {
+    const response = await axios.get('/job-seeker-infos/');
+    this.personalInfos = response.data;
   },
   methods: {
-    update({ first_name, last_name }) {
-      this.firstName = first_name;
-      this.lastName = last_name;
-    },
+    async updateInfos() {
+      console.log(this.personalInfos)
+      const response = await axios.patch('/job-seeker-infos/', this.personalInfos)
+      this.personalInfos = response.data
+    }
+      
+    
   },
-};
+}
 </script>
