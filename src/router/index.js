@@ -58,9 +58,15 @@ router.beforeEach((to, from, next) => {
       if (user) {
         next();
       } else {
-        next({
-          name: "Login",
-        });
+        if(to.name == "Profile") {
+          next({
+            name: 'Home'
+          })
+        } else {
+          next({
+            name: "Login",
+          });
+        }
       }
     });
   } else if (to.matched.some((record) => record.meta.guest)) {
