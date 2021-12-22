@@ -18,15 +18,11 @@
 export default {
   data() {
     return {
-      user: null
-    }
+      user: null,
+    };
   },
   async mounted() {
-    this.user = await this.$store.state.user
-    console.log(this.user)
+    this.user = await this.$store.state.user;
   },
-  computed: {
-    
-  }
-}
+};
 </script>
