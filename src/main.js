@@ -23,9 +23,19 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-firebase.auth().onAuthStateChanged(user => {
-  store.dispatch("updateUser", user);
-});
+const getUser = () => {
+  return new Promise((resolve) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        resolve(user);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
+
+store.dispatch("updateUser", getUser());
 
 new Vue({
   router,
