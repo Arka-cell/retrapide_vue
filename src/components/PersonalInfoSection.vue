@@ -37,7 +37,8 @@
                     class="input mb-2"
                     type="date"
                     placeholder="Birthdate"
-                    min="1900-01-01" max="2022-01-01"
+                    min="1900-01-01"
+                    max="2022-01-01"
                     v-model="personalInfos.birthdate"
                   />
                 </div>
@@ -63,7 +64,10 @@
                   >Currently looking for a job?</small
                 >
               </label>
-              <button class="button is-primary mb-3 is-fullwidth" @click="updateInfos()">
+              <button
+                class="button is-primary mb-3 is-fullwidth"
+                @click="updateInfos()"
+              >
                 Update Profile
               </button>
             </div>
@@ -71,29 +75,52 @@
         </div>
       </div>
     </section>
+    <div class="large-12 medium-12 small-12 cell">
+      <label
+        >File
+        <input
+          type="file"
+          id="file"
+          ref="file"
+          v-on:change="handleFileUpload()"
+        />
+      </label>
+      <button v-on:click="submitFile()">Submit</button>
+    </div>
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      personalInfos: {}
-    }
+      personalInfos: {},
+      resume: "",
+    };
   },
   async mounted() {
-    const response = await axios.get('/job-seeker-infos/');
+    const response = await axios.get("/job-seeker-infos/");
     this.personalInfos = response.data;
   },
   methods: {
     async updateInfos() {
-      console.log(this.personalInfos)
-      const response = await axios.patch('/job-seeker-infos/', this.personalInfos)
-      this.personalInfos = response.data
-    }
-      
-    
+      console.log(this.personalInfos);
+      const response = await axios.patch(
+        "/job-seeker-infos/",
+        this.personalInfos
+      );
+      this.personalInfos = response.data;
+    },
+    async handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+      let formData = new FormData();
+      console.log(this.file);
+      formData.append("file", this.file);
+
+      const response = await axios.put("/upload-resume/", formData);
+      console.log(response);
+    },
   },
-}
+};
 </script>
