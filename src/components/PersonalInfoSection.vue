@@ -131,7 +131,7 @@ export default {
       const storage = firebase.storage();
       var storageRef = storage.ref();
       const user = await this.$store.state.user;
-      const resumeRef = storageRef.child(`${user.uid}.pdf`);
+      const resumeRef = storageRef.child(`${user.uid}/${user.uid}.pdf`);
 
       resumeRef.getDownloadURL()
         .then((url) => {
