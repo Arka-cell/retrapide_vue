@@ -72,36 +72,42 @@
               </button>
             </div>
           </div>
+          <div class="column is-6 is-4-desktop mb-5">
+            <iframe id="resume" :src="resume_src">
+
+            </iframe>
+            <label>
+              <input
+                class="button is-primary mb-3 is-2"
+                text="Upload Your Resume"
+                type="file"
+                id="file"
+                ref="file"
+                v-on:change="handleFileUpload()"
+              />
+            </label>
+          </div>
         </div>
       </div>
     </section>
-    <div class="large-12 medium-12 small-12 cell">
-      <label
-        >File
-        <input
-          type="file"
-          id="file"
-          ref="file"
-          v-on:change="handleFileUpload()"
-        />
-      </label>
-      <button v-on:click="submitFile()">Submit</button>
-    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import firebase from "firebase";
 
 export default {
   data() {
     return {
       personalInfos: {},
       resume: "",
+      resume_src: "",
     };
   },
   async mounted() {
     const response = await axios.get("/job-seeker-infos/");
     this.personalInfos = response.data;
+    this.getResume();
   },
   methods: {
     async updateInfos() {
@@ -111,16 +117,27 @@ export default {
         this.personalInfos
       );
       this.personalInfos = response.data;
+      this.getResume();
     },
     async handleFileUpload() {
       this.file = this.$refs.file.files[0];
       let formData = new FormData();
       console.log(this.file);
       formData.append("file", this.file);
-
       const response = await axios.put("/upload-resume/", formData);
       console.log(response);
     },
+    async getResume() {
+      const storage = firebase.storage();
+      var storageRef = storage.ref();
+      const user = await this.$store.state.user;
+      const resumeRef = storageRef.child(`${user.uid}.pdf`);
+
+      resumeRef.getDownloadURL()
+        .then((url) => {
+          this.resume_src = url;
+        })
+    }
   },
 };
 </script>
