@@ -30,6 +30,24 @@ const routes = [
     },
   },
   {
+    path: "/company-registration",
+    name: "CompanyRegistration",
+    component: () =>
+      import(/* webpackChunkName: "company-registration" */ "@/views/CompanyProfileView.vue"),
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: "/job-seeker-registration",
+    name: "JobSeekerRegistration",
+    component: () =>
+      import(/* webpackChunkName: "job-seeker-registration" */ "@/views/JobSeekerRegistrationView.vue"),
+    meta: {
+      auth: true,
+    },
+  },
+  {
     path: "/login",
     name: "Login",
     component: () =>
@@ -58,7 +76,7 @@ router.beforeEach((to, from, next) => {
       if (user) {
         next();
       } else {
-        if(to.name == "Profile") {
+        if(to.name == "User") {
           next({
             name: 'Home'
           })
@@ -73,7 +91,7 @@ router.beforeEach((to, from, next) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         next({
-          name: "Profile",
+          name: "User",
         });
       } else {
         next();

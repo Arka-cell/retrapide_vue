@@ -5,11 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    is_company: null
   },
   mutations: {
     SET_USER(state, user) {
       state.user = user
+    },
+    SET_IS_COMPANY(state, is_company) {
+      state.is_company = is_company
     }
   },
   actions: {
@@ -19,7 +23,10 @@ export default new Vuex.Store({
       } else {
         commit('SET_USER', null)
       }
-    }
+    },
+    updateIsCompany({commit}, is_company) {
+      commit('SET_IS_COMPANY', is_company)
+    } 
   },
   getters: {
     user(state){

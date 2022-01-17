@@ -105,9 +105,8 @@ export default {
     };
   },
   async mounted() {
-    const response = await axios.get("/job-seeker-infos/");
-    this.personalInfos = response.data;
-    this.getResume();
+    const response = await axios.get("/user-state/");
+    console.log(response.data)
   },
   methods: {
     async updateInfos() {
