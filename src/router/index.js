@@ -39,6 +39,23 @@ const routes = [
     },
   },
   {
+    path: "/edit-job-offer/:id",
+    name: "EditJobOffer",
+    component: () =>
+      import(/* webpackChunkName: "edit-job-offer" */ "@/views/EditJobOffer.vue"),
+    meta: {
+      auth: true,
+    },
+    props: true,
+  },
+  {
+    path: "/job-offer/:id",
+    name: "JobOffer",
+    component: () =>
+      import(/* webpackChunkName: "job-offer" */ "@/components/JobOffer.vue"),
+    props: true,
+  },
+  {
     path: "/job-seeker-registration",
     name: "JobSeekerRegistration",
     component: () =>
@@ -46,6 +63,26 @@ const routes = [
     meta: {
       auth: true,
     },
+  },
+  {
+    path: "/create-job-offer",
+    name: "CreateJob",
+    component: () =>
+      import(/* webpackChunkName: "create-job-offer" */ "@/views/CreateJobView.vue"),
+    meta: {
+      auth: true,
+    },
+    props: true,
+  },
+  {
+    path: "/my-job-offer/candidates",
+    name: "OfferCandidates",
+    component: () =>
+      import(/* webpackChunkName: "my-job-offer/candidates" */ "@/views/OfferCandidates.vue"),
+    meta: {
+      auth: true,
+    },
+    props: true,
   },
   {
     path: "/login",
