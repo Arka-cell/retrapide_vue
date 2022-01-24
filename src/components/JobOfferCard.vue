@@ -106,7 +106,7 @@ export default {
     getImage() {
       const storage = firebase.storage();
       const storageRef = storage.ref();
-      const imageRef = storageRef.child("img/" + this.content.company);
+      const imageRef = storageRef.child("img/" + this.content.get_uid);
       imageRef.getDownloadURL().then((url) => {
         this.profile_img = url;
       });
