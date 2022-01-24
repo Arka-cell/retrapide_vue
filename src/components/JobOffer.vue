@@ -38,16 +38,13 @@
           <div class="buttons is-right">
             <div
               v-if="
-                this.is_company == false || this.is_company == 'Not Created'
+                this.is_company == false
               "
               class="button is-success is-right"
               @click="applyJob(job_offer.id, job_offer.get_uid)"
             >
               Postuler
             </div>
-            <button @click="allowResume(job_offer.get_uid)">
-              Share Resume
-            </button>
           </div>
         </div>
       </div>
@@ -87,11 +84,10 @@ export default {
       this.getUserState();
     },
     async getImage() {
-      console.log(this.job_offer.company);
       const storage = firebase.storage();
       const storageRef = storage.ref();
 
-      const imageRef = await storageRef.child("img/" + this.job_offer.company);
+      const imageRef = await storageRef.child("img/" + this.job_offer.get_uid);
       imageRef.getDownloadURL().then((url) => {
         this.company_image = url;
       });
@@ -105,22 +101,18 @@ export default {
       }
     },
     async allowResume(companyId) {
-      console.log(companyId);
       const storage = firebase.storage();
       var storageRef = storage.ref();
       const user = await this.$store.state.user;
       const resumeRef = storageRef.child(`${user.uid}/${user.uid}.pdf`);
       const metadata = await resumeRef.getMetadata();
       const stringMetadata = JSON.stringify(metadata.customMetadata)
-      console.log(stringMetadata)
       const newMetadata = {
         customMetadata: {
           companies:  stringMetadata.companies + companyId,
         },
       };
-      await resumeRef.updateMetadata(newMetadata).then((metadata) => {
-        console.log(metadata.customMetadata);
-      });
+      await resumeRef.updateMetadata(newMetadata);
     },
   },
 };
