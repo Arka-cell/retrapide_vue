@@ -1,5 +1,6 @@
 <template>
   <div class="box has-text-centered">
+    <PageLoader :mountedFinished="this.mountedFinished"/>
     <h1 class="title">Nos offres d'emploi</h1>
     <div class="columns is-multiline">
       <JobOfferCard
@@ -19,13 +20,15 @@ export default {
     return {
       page: 1,
       job_offers: [],
+      mountedFinished: false,
     };
   },
   components: {
     JobOfferCard,
   },
   mounted() {
-    this.getJobPage()
+    this.getJobPage();
+    this.mountedFinished = true;
   },
   methods: {
     async getJobPage() {
