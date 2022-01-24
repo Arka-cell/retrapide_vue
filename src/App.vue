@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <PageLoader :mountedFinished="this.mountedFinished"/>
     <nav class="navbar py-4">
       <div class="container">
         <div class="navbar-brand is-centered">
@@ -55,15 +56,21 @@
 
 <script>
 import firebase from "firebase/app";
+import PageLoader from "@/components/PageLoader.vue";
 
 export default {
   data() {
     return {
       user: null,
+      mountedFinished: false
     };
+  },
+  components: {
+    PageLoader
   },
   async mounted() {
     this.user = await this.$store.state.user;
+    this.mountedFinished = true;
   },
   methods: {
     signOut() {
