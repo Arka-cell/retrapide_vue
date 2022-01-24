@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="card">
       <div class="card-content">
         <div class="media">
           <div class="media-left">
@@ -24,15 +23,25 @@
           <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
         </div>
         <div class="buttons is-right">
-          <button class="button is-right is-success is-light" @click="getResume()">See CV</button>
+          <button
+            class="button is-right is-success is-light"
+            @click="getResume()"
+          >
+            See CV
+          </button>
+        </div>
+      </div>
+      <div class="columns is-centered ">
+        <div
+          id="resume"
+          v-if="this.resume_src"
+          class="column is-10 has-text-centered mgb-large"
+        >
+          <iframe :src="this.resume_src" width="90%" height="400px"></iframe>
         </div>
       </div>
     </div>
-    {{ candidate }}
-    <div v-if="this.resume_src" class="box">
-      <iframe :src="this.resume_src"></iframe>
-    </div>
-  </div>
+  
 </template>
 
 <script>
@@ -58,7 +67,7 @@ export default {
       console.log(await this.$store.state.user);
       const storage = firebase.storage();
       const storageRef = storage.ref();
-      const imageRef = storageRef.child("img/" + this.candidate.user_id);
+      const imageRef = storageRef.child("img/" + this.candidate.user_uid);
       imageRef.getDownloadURL().then((url) => {
         this.profile_img = url;
       });
@@ -66,7 +75,9 @@ export default {
     async getResume() {
       const storage = firebase.storage();
       var storageRef = storage.ref();
-      const resumeRef = storageRef.child(`${this.candidate.user_uid}/${this.candidate.user_uid}.pdf`);
+      const resumeRef = storageRef.child(
+        `${this.candidate.user_uid}/${this.candidate.user_uid}.pdf`
+      );
       resumeRef.getDownloadURL().then((url) => {
         this.resume_src = url + "#view=Fit";
       });
@@ -74,3 +85,6 @@ export default {
   },
 };
 </script>
+<style>
+
+</style>
