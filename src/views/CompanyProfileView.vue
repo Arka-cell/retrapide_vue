@@ -32,7 +32,6 @@
           </div>
         </div>
         <div class="box">
-          <!-- I need to put a big centered company icon here -->
           <div class="field">
             <label class="label">Company Name</label>
             <div class="control has-icons-left has-icons-right">
@@ -197,7 +196,12 @@
                 src="@/assets/document-edit.png"
                 @click="editJobOffer(job.id)"
               />
-              <p class="has-text-link is-clickable is-size-7 is-italic" @click="seeOfferCandidates(job.id)">See candidates</p>
+              <p
+                class="has-text-link is-clickable is-size-7 is-italic"
+                @click="seeOfferCandidates(job.id)"
+              >
+                See candidates
+              </p>
             </div>
           </div>
         </div>
@@ -220,6 +224,10 @@ export default {
     };
   },
   mounted() {
+    if (this.auth) {
+      //If not authenticated
+      window.history.back();
+    }
     // is isCompany user state is false, redirect to unauthorized message page
     this.getInfos();
     this.getMyJobOffers();
@@ -265,24 +273,25 @@ export default {
     },
     async handleFileUpload() {
       this.file = this.$refs.file.files[0];
-      console.log(this.form.id);
-      const storageRef = firebase.storage().ref("img/" + this.form.user_id);
+      console.log("here", this.form);
+      const storageRef = firebase.storage().ref("img/" + this.form.user_uid);
       storageRef.put(this.file);
       this.getImage();
     },
     getImage() {
       const storage = firebase.storage();
       const storageRef = storage.ref();
-
-      const imageRef = storageRef.child("img/" + this.form.user_id)
+      const imageRef = storageRef.child("img/" + this.form.user_uid);
       imageRef.getDownloadURL().then((url) => {
-        this.profile_img = url
-      })
+        this.profile_img = url;
+      });
     },
     seeOfferCandidates(job_id) {
-      
-      this.$router.push({ name: 'OfferCandidates', params: {id: `${job_id}`}})
-    }
+      this.$router.push({
+        name: "OfferCandidates",
+        params: { id: `${job_id}` },
+      });
+    },
   },
 };
 </script>
