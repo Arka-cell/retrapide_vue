@@ -1,11 +1,11 @@
 <template>
-<div>
-<div class="columns is-centered">
+<div class="card">
+<div class="columns is-centered is-mobile">
     <CandidateCard 
       v-for="candidate in candidates"
       :key="candidate.id"
       :content="candidate"
-      class="column is-10"
+      class="column is-11"
     />
   </div>
 </div>
