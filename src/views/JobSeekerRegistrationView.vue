@@ -204,7 +204,6 @@ export default {
     };
   },
   mounted() {
-    // is isCompany user state is true, redirect to unauthorized message page
     this.getUserState();
     this.getInfos();
     this.getResume();
@@ -216,7 +215,6 @@ export default {
         if (this.form[key] == this.savedForm[key]) {
           continue;
         } else {
-          console.log(key, " will be changed");
           editedData[key] = this.form[key];
         }
       }
@@ -246,7 +244,6 @@ export default {
       resumeRef.getDownloadURL().then((url) => {
         this.resume_src = url + "#view=Fit";
       });
-      // this.$refs.file.files[0] = this.resume_src 
     },
     async getUserState() {
       const response = await axios.get("/user-state/");
@@ -256,14 +253,14 @@ export default {
     },
     async handleImageUpload() {
       this.file = this.$refs.image.files[0];
-      const storageRef = firebase.storage().ref("img/" + this.form.user_id);
+      const storageRef = firebase.storage().ref("img/" + this.form.user_uid);
       storageRef.put(this.file);
       this.getImage();
     },
     async getImage() {
       const storage = firebase.storage();
       const storageRef = storage.ref();
-      const imageRef = storageRef.child("img/" + this.form.user_id)
+      const imageRef = storageRef.child("img/" + this.form.user_uid);
       imageRef.getDownloadURL().then((url) => {
         if(url) {
           this.profile_img = url
