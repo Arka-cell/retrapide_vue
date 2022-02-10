@@ -1,23 +1,26 @@
 <template>
-  <div class="box">
+  <div class="column is-4">
     <article class="media">
       <div class="media-left">
         <figure class="image is-64x64">
-          <img
-            src="https://bulma.io/images/placeholders/128x128.png"
-            alt="Image"
-          />
+          <img :src="this.company_img" alt="Image" />
         </figure>
       </div>
       <div class="media-content">
         <div class="content">
           <p>
-            <strong>John Smith</strong> <small>@johnsmith</small>
-            <small>31m</small>
+            <strong>{{ content.name }}</strong>
+            <small> {{ content.email }} </small>
             <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-            efficitur sit amet massa fringilla egestas. Nullam condimentum
-            luctus turpis.
+            <small>{{
+              new Date(Date.parse(content.created_at))
+                .toISOString()
+                .replace("-", "/")
+                .split("T")[0]
+                .replace("-", "/")
+            }}</small>
+            <br />
+            {{ content.description }}
           </p>
         </div>
         <nav class="level is-mobile">
@@ -44,7 +47,35 @@
   </div>
 </template>
 <script>
+import firebase from "firebase";
+
 export default {
-    name: "CompanyCard"
-}
+  name: "CompanyCard",
+  data() {
+    return {
+      company_img: "",
+    };
+  },
+  props: {
+    content: { type: Object, required: true },
+  },
+  methods: {
+    getImage() {
+      const storage = firebase.storage();
+      const storageRef = storage.ref();
+      const imageRef = storageRef.child("img/" + this.content.user_uid);
+      imageRef.getDownloadURL().then((url) => {
+        this.company_img = url;
+      });
+    },
+  },
+  mounted() {
+    this.getImage();
+  },
+};
 </script>
+<style scoped>
+.column {
+  margin: 5px;
+}
+</style>
