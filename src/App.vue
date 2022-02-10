@@ -22,7 +22,9 @@
           </a>
         </div>
         <div class="navbar-menu">
+          
           <div class="navbar-end">
+            <input v-model="search_query" class="input" type="text" placeholder="Text input" @keyup.enter="search()">
             <router-link class="navbar-item" to="/about">About</router-link
             ><router-link class="navbar-item" to="/companies"
               >Companies</router-link
@@ -62,7 +64,8 @@ export default {
   data() {
     return {
       user: null,
-      mountedFinished: false
+      mountedFinished: false,
+      search_query: "",
     };
   },
   components: {
@@ -78,6 +81,12 @@ export default {
       this.user = null;
       this.$store.dispatch("updateUser", this.user);
     },
+    async search() {
+      await this.$router.push({ path: `/job-search/${this.search_query}`});
+      if(this.$router.currentRoute.name === "JobOffersResult") {
+        this.$router.go();
+      }
+    }
   },
 };
 </script>
