@@ -1,5 +1,6 @@
 <template>
   <div class="column is-4">
+    <SmallPageLoader :mountedFinished="this.mountedFinished"/>
     <div class="card custom-size">
       <div class="is-vcenteredis-multiline">
         <header
@@ -35,12 +36,6 @@
           <div class="media">
             <div class="has-text-left description-size">
               <p>{{ content.description.substring(0, 120) }} ...</p>
-              <g-link
-                class="has-text-link is-clickable"
-                :to="`/job-offer/${content.id}/`"
-                @click="toJobOffer(content.id)"
-                >Lire plus</g-link
-              >
               <div
                 v-for="skill in content.skills_array"
                 v-bind:key="skill"
@@ -73,12 +68,13 @@
                 .replace("-", "/")
             }}</time
           >
-          <button
+          <g-link
             class="has-text-weight-medium button is-success"
-            @click="applyOffer(content.id)"
+            :to="`/job-offer/${content.id}/`"
+            @click="toJobOffer(content.id)"
           >
-            Postuler
-          </button>
+            Voir Plus
+          </g-link>
         </div>
       </div>
     </div>
@@ -88,15 +84,20 @@
 <script>
 import firebase from "firebase";
 import axios from "axios";
+import SmallPageLoader from "@/components/SmallPageLoader.vue"
 
 export default {
   name: "JobOfferCard",
   props: {
     content: { type: Object, required: true },
   },
+  components: {
+    SmallPageLoader
+  },
   data() {
     return {
       profile_img: "./assets/business.png",
+      mountedFinished: false,
     };
   },
   methods: {
@@ -112,11 +113,12 @@ export default {
       });
     },
     async toJobOffer(id) {
-      await this.$router.push({ path: `/job-offer/${id}`});
+      await this.$router.push({ path: `/job-offer/${id}` });
     },
   },
   mounted() {
     this.getImage();
+    this.mountedFinished = true;
   },
 };
 </script>
