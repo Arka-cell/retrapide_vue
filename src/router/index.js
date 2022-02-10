@@ -56,6 +56,13 @@ const routes = [
     props: true,
   },
   {
+    path: "/job-search/:query",
+    name: "JobOffersResult",
+    component: () =>
+      import(/* webpackChunkName: "job-search" */ "@/components/JobOffersResult.vue"),
+    props: true,
+  },
+  {
     path: "/job-seeker-registration",
     name: "JobSeekerRegistration",
     component: () =>
@@ -98,6 +105,12 @@ const routes = [
     name: "Error",
     component: () =>
       import(/* webpackChunkName: "errorPage" */ "@/views/Error.vue"),
+  },
+  {
+    path: "/companies",
+    name: "Companies",
+    component: () =>
+      import(/* webpackChunkName: "Companies" */ "@/views/CompaniesView.vue"),
   },
 ];
 
