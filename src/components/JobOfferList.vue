@@ -21,6 +21,7 @@ export default {
       page: 1,
       job_offers: [],
       mountedFinished: false,
+      my_applied_jobs: {},
     };
   },
   components: {
@@ -34,7 +35,12 @@ export default {
     async getJobPage() {
       const response = await axios.get(`/job-offers/${this.page}/`);
       this.job_offers = response.data.job_offers;
+      this.myAppliedJobs()
     },
+    async myAppliedJobs() {
+      const response = await axios.get("/my-applied-jobs/");
+      this.my_applied_jobs = response.data;
+    }
   },
 };
 </script>
