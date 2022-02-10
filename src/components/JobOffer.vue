@@ -40,10 +40,10 @@
               v-if="
                 this.is_company == false
               "
-              class="button is-success is-right"
+              :class="job_offer.has_applied ? 'button is-gray is-light': 'button is-success is-right'" :disabled="job_offer.has_applied ? true : false"
               @click="applyJob(job_offer.id, job_offer.get_uid)"
             >
-              Postuler
+              {{ job_offer.has_applied ? 'Déja postulé' : 'Postuler' }}
             </div>
           </div>
         </div>
@@ -77,11 +77,20 @@ export default {
       this.is_company = response.data.is_company;
     },
     async getJob() {
+      const user = await this.$store.state.user
       const id = this.id;
-      const response = await axios.get(`/job-offer/${id}/`);
-      this.job_offer = response.data;
+      if(user) {
+        const response = await axios.get(`/job-offer/${id}/`);
+        this.job_offer = response.data;
+        console.log(this.job_offer)
+
+      } else {
+        const response = await axios.get(`/job-offer/${id}/`);
+        this.job_offer = response.data;
+      }
       this.getImage();
       this.getUserState();
+      
     },
     async getImage() {
       const storage = firebase.storage();
@@ -96,6 +105,7 @@ export default {
       if (!this.is_company) {
         await axios.put(`/apply-job/${id}/`);
         this.allowResume(companyId);
+        this.job_offer.has_applied = true;
       } else if (this.is_company == "Not Created") {
         this.$router.push({ name: "Login" });
       }
